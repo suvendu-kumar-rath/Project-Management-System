@@ -39,9 +39,9 @@ const LoginPage = () => {
       <div className="w-full max-w-md">
         <div className="text-center mb-8">
           <div className="w-12 h-12 bg-primary rounded-lg flex items-center justify-center mx-auto mb-4">
-            <span className="text-primary-foreground font-display font-bold text-xl">D</span>
+            <span className="text-primary-foreground font-display font-bold text-xl">V</span>
           </div>
-          <h1 className="font-display text-2xl font-bold text-foreground">DesignFlow PMS</h1>
+          <h1 className="font-display text-2xl font-bold text-foreground">Vedaraa PMS</h1>
           <p className="text-muted-foreground mt-1 font-body text-sm">Interior Design Project Management</p>
         </div>
 

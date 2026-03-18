@@ -1,4 +1,4 @@
-# DesignFlow - Project Management System
+# Vedaraa PMS
 
 A sleek, modern Project Management System tailored for design and operations workflows. Built with **React**, **TypeScript**, **Vite**, and **Tailwind CSS**.
 

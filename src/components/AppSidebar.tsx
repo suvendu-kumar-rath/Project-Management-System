@@ -42,9 +42,9 @@ const AppSidebar = () => {
       {/* Logo */}
       <div className="h-14 flex items-center px-4 border-b border-sidebar-border">
         <div className="w-8 h-8 bg-sidebar-primary rounded flex items-center justify-center shrink-0">
-          <span className="text-sidebar-primary-foreground font-display font-bold text-sm">D</span>
+          <span className="text-sidebar-primary-foreground font-display font-bold text-sm">V</span>
         </div>
-        {!collapsed && <span className="ml-3 font-display font-semibold text-sm truncate">DesignFlow</span>}
+        {!collapsed && <span className="ml-3 font-display font-semibold text-sm truncate">Vedaraa PMS</span>}
       </div>
 
       {/* Nav links */}
