@@ -85,19 +85,8 @@ export async function createUser(data: Omit<User, 'id' | 'createdAt' | 'isActive
 }
 
 export async function deleteUser(id: string): Promise<boolean> {
-  const { data: session } = await supabase.auth.getSession();
-  if (!session?.session) throw new Error("Unauthorized");
-
-  const res = await fetch(`${BACKEND_URL}/auth/delete-user/${id}`, {
-    method: 'DELETE',
-    headers: {
-      'Authorization': `Bearer ${session.session.access_token}`
-    }
-  });
-
-  const resData = await res.json();
-  if (!res.ok) throw new Error(resData.error || 'Failed to delete user');
-  
+  const { error } = await supabase.rpc('delete_user', { target_user_id: id });
+  if (error) throw new Error(error.message);
   return true;
 }
 
