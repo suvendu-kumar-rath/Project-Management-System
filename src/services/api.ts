@@ -77,8 +77,10 @@ export async function createUser(data: Omit<User, 'id' | 'createdAt' | 'isActive
     },
     body: JSON.stringify(data)
   });
-  
-  const resData = await res.json();
+
+  const text = await res.text();
+  let resData: any = {};
+  try { resData = JSON.parse(text); } catch { throw new Error(text || 'Failed to create user'); }
   if (!res.ok) throw new Error(resData.error || 'Failed to create user');
   
   return resData.user;

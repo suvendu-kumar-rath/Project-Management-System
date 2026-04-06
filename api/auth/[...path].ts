@@ -15,20 +15,24 @@ const supabaseAdmin = createClient(
 );
 
 const requireAdmin = async (req: Request, res: Response, next: NextFunction) => {
-  const authHeader = req.headers.authorization;
-  if (!authHeader) return res.status(401).json({ error: 'Missing Authorization header' });
+  try {
+    const authHeader = req.headers.authorization;
+    if (!authHeader) return res.status(401).json({ error: 'Missing Authorization header' });
 
-  const token = authHeader.replace('Bearer ', '');
-  const { data: { user }, error } = await supabaseAdmin.auth.getUser(token);
-  if (error || !user) return res.status(401).json({ error: 'Invalid Token' });
+    const token = authHeader.replace('Bearer ', '');
+    const { data: { user }, error } = await supabaseAdmin.auth.getUser(token);
+    if (error || !user) return res.status(401).json({ error: 'Invalid Token' });
 
-  const { data: userData, error: dbError } = await supabaseAdmin
-    .from('users').select('role').eq('id', user.id).single();
+    const { data: userData, error: dbError } = await supabaseAdmin
+      .from('users').select('role').eq('id', user.id).single();
 
-  if (dbError || !userData || userData.role !== 'ADMIN') {
-    return res.status(403).json({ error: 'Forbidden. Requires ADMIN role.' });
+    if (dbError || !userData || userData.role !== 'ADMIN') {
+      return res.status(403).json({ error: 'Forbidden. Requires ADMIN role.' });
+    }
+    next();
+  } catch (err: any) {
+    res.status(500).json({ error: err.message || 'Internal server error' });
   }
-  next();
 };
 
 app.post('/api/auth/create-user', requireAdmin, async (req, res) => {
@@ -127,6 +131,12 @@ app.delete('/api/auth/delete-project/:id', requireAdmin, async (req, res) => {
   } catch (error: any) {
     res.status(500).json({ error: error.message || 'Internal server error' });
   }
+});
+
+// Catch-all error handler so Express never falls through to Vercel's HTML error page
+app.use((err: any, _req: Request, res: Response, _next: NextFunction) => {
+  console.error('Unhandled error:', err);
+  res.status(500).json({ error: err.message || 'Internal server error' });
 });
 
 export default serverless(app);
