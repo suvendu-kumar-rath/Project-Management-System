@@ -17,7 +17,16 @@ export function seedIfEmpty() {
 // ==================== AUTH ====================
 export async function login(email: string, password: string): Promise<User | null> {
   const { data, error } = await supabase.auth.signInWithPassword({ email, password });
-  if (error || !data.user) throw error;
+  if (error) {
+    if (error.message?.toLowerCase().includes('invalid login credentials')) {
+      throw new Error('Invalid email or password');
+    }
+    if (error.message?.toLowerCase().includes('fetch') || error.message?.toLowerCase().includes('network')) {
+      throw new Error('Cannot reach Supabase. Check that VITE_SUPABASE_URL and VITE_SUPABASE_ANON_KEY are set in Vercel environment variables and redeploy.');
+    }
+    throw new Error(error.message);
+  }
+  if (!data.user) throw new Error('Invalid email or password');
   
   const { data: userData, error: userError } = await supabase
     .from('users')
@@ -25,7 +34,10 @@ export async function login(email: string, password: string): Promise<User | nul
     .eq('id', data.user.id)
     .single();
 
-  if (userError || !userData) throw userError;
+  if (userError) throw new Error(userError.message);
+  if (!userData) throw new Error('User profile not found');
+  if (!userData.is_active) throw new Error('Your account is inactive. Contact an admin.');
+
   return {
     ...userData,
     isActive: userData.is_active,

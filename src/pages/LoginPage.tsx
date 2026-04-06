@@ -27,9 +27,9 @@ const LoginPage = () => {
           case 'DESIGNER': navigate('/designer/dashboard'); break;
           case 'OPERATIONS': navigate('/operations/dashboard'); break;
         }
-      } else {
-        toast.error('Invalid email or password');
       }
+    } catch (err: any) {
+      toast.error(err?.message || 'Invalid email or password');
     } finally {
       setLoading(false);
     }
