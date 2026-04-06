@@ -3,5 +3,15 @@
     { "source": "/api/auth/(.*)", "destination": "/api/auth/[...path]" },
     { "source": "/api/upload/(.*)", "destination": "/api/upload/[...path]" },
     { "source": "/(.*)", "destination": "/index.html" }
-  ]
+  ],
+  "experimentalServices": {
+    "frontend": {
+      "routePrefix": "/",
+      "framework": "vite"
+    },
+    "backend": {
+      "entrypoint": "backend",
+      "routePrefix": "/_/backend"
+    }
+  }
 }
